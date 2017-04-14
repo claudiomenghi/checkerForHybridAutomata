@@ -3,7 +3,8 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'antlr'
-
+apply plugin:'application'
+mainClassName = "solvers.solvers.MITLIsolver"
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -38,6 +39,8 @@ sourceSets {
         }
     }
 }
+
+
 
 // In this section you declare the dependencies for your production and test code
 dependencies {

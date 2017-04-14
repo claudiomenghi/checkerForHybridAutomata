@@ -51,8 +51,11 @@ public class MITLIsolver {
 		converted.printFancy(out);
 
 		this.vocabulary = converted.getVocabulary();
-
-		return new CLTLocsolver(cltlocFormula, out, bound).solve();
+		
+		CLTLocsolver solver=new CLTLocsolver(cltlocFormula, out, bound);
+		boolean result=solver.solve();
+		this.zotEncoding=solver.getZotEncoding();
+		return result;
 
 	}
 
@@ -100,7 +103,7 @@ public class MITLIsolver {
 			}
 
 			FileUtils.writeStringToFile(new File(cltlocFile),
-					solver.getCltlocFormula().accept(new NicelyIndentToString()));
+					solver.getCltlocFormula().toString());
 			out.println("CLTLoc formula written in the file " + cltlocFile);
 
 			// Writing the vocabulary

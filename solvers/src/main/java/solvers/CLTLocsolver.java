@@ -19,6 +19,12 @@ public class CLTLocsolver {
 	
 	private long checkingspace;
 	
+	private String zotEncoding;
+	
+	public String getZotEncoding() {
+		return zotEncoding;
+	}
+
 	public CLTLocsolver(CLTLocFormula formula, PrintStream out, int bound) {
 
 		this.formula = formula;
@@ -42,6 +48,7 @@ public class CLTLocsolver {
 		boolean sat = zotRunner.run();
 		this.checkingtime=zotRunner.getCheckingtime();
 		this.checkingspace=zotRunner.getCheckingspace();
+		this.zotEncoding=zotRunner.getZotEncoding();
 		return sat;
 	}
 

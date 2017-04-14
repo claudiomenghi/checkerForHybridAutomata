@@ -2,6 +2,14 @@
 ## Running the checker 
 To run the checker 
 
+- open the *solvers* folder
+- run gradle run -PappArgs="['exampleProperty.mitli','20']" where *exampleProperty.mitli* is the property to be checked and *20* is the bound to be used.
+
+## Analyzing the output
+The solver produces the following files
+- *exampleProperty.cltloc* the CLTLoc encoding of the formula;
+- *exampleProperty.vocabulary* the vocabulary that assigns each subformula to the corresponding propositions;
+- *exampleProperty.lisp* contains the encodin that is passed to the zot solver
 
 
 
