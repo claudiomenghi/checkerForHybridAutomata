@@ -1,6 +1,6 @@
 # Checker for Hybrid automata
 ## Running the checker 
-To run the checker 
+Assuming ZOT installed and working, to run the checker 
 
 - open the *solvers* folder
 - run gradle run -PappArgs="['exampleProperty.mitli','20']" where *exampleProperty.mitli* is the property to be checked and *20* is the bound to be used.
