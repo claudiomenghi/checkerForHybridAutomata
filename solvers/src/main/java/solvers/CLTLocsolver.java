@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import formulae.cltloc.CLTLocFormula;
-import formulae.cltloc.converters.CLTLoc2ZotBvzot;
+import formulae.cltloc.converters.CLTLoc2Ae2zot;
+import formulae.cltloc.converters.CLTLoc2ZotDReal;
 import formulae.cltloc.visitor.CLTLoc2StringVisitor;
 import zotrunner.ZotException;
 import zotrunner.ZotRunner;
@@ -36,7 +37,7 @@ public class CLTLocsolver {
 	public boolean solve() throws IOException, ZotException {
 		out.println("Converting the following CLTLoc formula in zot");
 		out.println(formula.accept(new CLTLoc2StringVisitor()).getKey());
-		String zotEncoding = new CLTLoc2ZotBvzot(bound).apply(formula);
+		String zotEncoding = new CLTLoc2ZotDReal(bound).apply(formula);
 
 		out.println("************************************************");
 		out.println("ZOT ENCODING");

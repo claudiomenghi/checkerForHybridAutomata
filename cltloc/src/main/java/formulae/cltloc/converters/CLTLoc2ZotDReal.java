@@ -41,9 +41,9 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 
 		
 		final StringBuilder footerBuilder = new StringBuilder();
-		footerBuilder.append(":signals '(" + StringUtils.join(signals, ' ') + ")");
+		footerBuilder.append(":signals '(" + StringUtils.join(signals, ' ') + ")\n");
 		
-		footerBuilder.append(":discrete-counters '(" + StringUtils.join(variables, ' ') + ")");
+		footerBuilder.append(":discrete-counters '(" + StringUtils.join(variables, ' ') + ")\n");
 
 		
 		builder.append("(ae2zotdreal:zot " + bound + " (&&" + formula.accept(new CLTLoc2ZotVisitor()) + ")\n\n"
