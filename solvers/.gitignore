@@ -18,3 +18,4 @@ bin/*
 *.cltloc
 *.vocabulary
 /bin/
+vocabulary.txt

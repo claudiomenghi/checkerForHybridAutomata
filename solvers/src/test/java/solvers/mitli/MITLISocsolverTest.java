@@ -42,7 +42,22 @@ public class MITLISocsolverTest {
 	}
 
 	
+	@Test
+	public void testExample2() throws IOException, ZotException {
+		String path = ClassLoader.getSystemResource("solvers/mitli/example2.mitli").getPath();
 
-	
-	
+		ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(path));
+		MITLILexer lexer = new MITLILexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		MITLIParser parser = new MITLIParser(tokens);
+		parser.setBuildParseTree(true);
+		MITLIFormula formula = parser.mitli().formula;
+		
+		
+		MITLIsolver solver=new MITLIsolver(formula, new PrintStream(System.out),  10);
+		
+		boolean result=solver.solve();
+		
+		assertTrue( "An ap should be solvable", result);
+	}
 }

@@ -55,6 +55,15 @@ public class MITLIsolver {
 		CLTLocsolver solver=new CLTLocsolver(cltlocFormula, out, bound);
 		boolean result=solver.solve();
 		this.zotEncoding=solver.getZotEncoding();
+		
+		
+		StringBuilder vocabularyBuilder = new StringBuilder();
+		this.vocabulary.entrySet().forEach(e -> vocabularyBuilder.append(e.getValue() + "\t" + e.getKey() + "\n"));
+		
+		out.println("Vocabulary:");
+		out.println(vocabularyBuilder.toString());
+		FileUtils.writeStringToFile(new File("vocabulary.txt"), vocabularyBuilder.toString());
+
 		return result;
 
 	}
