@@ -16,7 +16,6 @@ import org.apache.commons.io.FileUtils;
 import com.google.common.base.Preconditions;
 
 import formulae.cltloc.CLTLocFormula;
-import formulae.cltloc.visitor.NicelyIndentToString;
 import formulae.mitli.MITLIFormula;
 import formulae.mitli.converters.MITLI2CLTLoc;
 import formulae.mitli.parser.MITLILexer;

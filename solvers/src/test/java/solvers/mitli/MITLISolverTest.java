@@ -18,7 +18,7 @@ import formulae.mitli.parser.MITLIParser;
 import solvers.MITLIsolver;
 import zotrunner.ZotException;
 
-public class MITLISocsolverTest {
+public class MITLISolverTest {
 
 	private final PrintStream out = new PrintStream(ByteStreams.nullOutputStream());
 

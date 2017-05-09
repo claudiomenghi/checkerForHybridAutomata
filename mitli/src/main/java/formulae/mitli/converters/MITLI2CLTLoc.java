@@ -67,7 +67,7 @@ public class MITLI2CLTLoc {
 			this.clockcontraintFormulaMap.put(f, f2);
 			
 			
-			
+
 			conjunction = CLTLocFormula.getAnd( conjunction, formula);
 		
 		}
