@@ -11,14 +11,6 @@ repositories {
 	mavenCentral()    
 }
 
-generateGrammarSource << {
-    println "Copying generated grammar lexer/parser files to main directory."
-    copy {
-        from "${buildDir}/generated-src/antlr/main"
-        into "src/main/java/formulae/mitli/parser"
-    }
-    delete "${buildDir}/generated-src/antlr/main"
-}
 
 sourceSets {
     main {
