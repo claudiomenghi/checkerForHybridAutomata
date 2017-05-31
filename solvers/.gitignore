@@ -19,3 +19,4 @@ bin/*
 *.vocabulary
 /bin/
 vocabulary.txt
+*.zot
