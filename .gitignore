@@ -6,3 +6,5 @@
 *.gradle/
 *.settings/
 *tmp.zot
+*.merda.txt
+*/merda.txt
