@@ -96,6 +96,11 @@ public class MITLIRelationalAtom extends MITLIAtom {
 		return "("+identifier+" "+operator+" "+ value+")";
 	}
 	
+	
+	public String getString() {
+		return identifier+" "+operator+" "+ value;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

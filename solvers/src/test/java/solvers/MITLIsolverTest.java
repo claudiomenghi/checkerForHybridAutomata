@@ -5,11 +5,15 @@ import static org.junit.Assert.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import com.google.common.collect.HashBiMap;
 
 import formulae.cltloc.CLTLocFormula;
 import formulae.mitli.MITLIFormula;
@@ -37,7 +41,7 @@ public class MITLIsolverTest {
 
 		CLTLocFormula clockconstraint = converter.getTheta(a);
 
-		assertTrue("The clock constraint sould be satisfiable", new CLTLocsolver(clockconstraint, out, 5).solve());
+		assertTrue("The clock constraint sould be satisfiable", new CLTLocsolver(clockconstraint, out, 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 
 	@Test
@@ -45,7 +49,7 @@ public class MITLIsolverTest {
 
 		MITLIFormula f = new MITLIRelationalAtom("X", "=", 5);
 
-		MITLIsolver sover = new MITLIsolver(f, out, 5);
+		MITLIsolver sover = new MITLIsolver(f, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 	}
@@ -58,7 +62,7 @@ public class MITLIsolverTest {
 
 		MITLIFormula formula = new MITLIFalse();
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 	}
@@ -69,7 +73,7 @@ public class MITLIsolverTest {
 		MITLIFormula formula1 = new MITLIFalse();
 
 		MITLIFormula formula2 = MITLIFormula.not(new MITLIFalse());
-		MITLIsolver sover = new MITLIsolver(MITLIFormula.and(formula1, formula2), out, 5);
+		MITLIsolver sover = new MITLIsolver(MITLIFormula.and(formula1, formula2), out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertFalse(sover.solve());
 	}
@@ -88,7 +92,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -106,7 +110,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -124,7 +128,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -143,7 +147,7 @@ public class MITLIsolverTest {
 		MITLIFormula formula = parser.mitli().formula;
 
 		
-		MITLIsolver sover = new MITLIsolver(formula, out, 20);
+		MITLIsolver sover = new MITLIsolver(formula, out, 20,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -161,7 +165,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -179,7 +183,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -198,7 +202,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 15);
+		MITLIsolver sover = new MITLIsolver(formula, out, 15,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -217,7 +221,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -236,7 +240,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -254,7 +258,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 
@@ -270,7 +274,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 	}
@@ -285,7 +289,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 	}
@@ -300,7 +304,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertFalse(sover.solve());
 	}
@@ -316,7 +320,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 	}
@@ -331,7 +335,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertFalse(sover.solve());
 	}
@@ -347,7 +351,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	
@@ -361,7 +365,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	
@@ -375,7 +379,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	
@@ -388,7 +392,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	
@@ -401,7 +405,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	
@@ -418,7 +422,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertFalse(sover.solve());
 	}
@@ -433,7 +437,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertFalse(sover.solve());
 	}
@@ -450,7 +454,7 @@ public class MITLIsolverTest {
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
 
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 
 		assertTrue(sover.solve());
 	}
@@ -464,7 +468,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	
@@ -478,7 +482,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	
@@ -492,7 +496,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	
@@ -505,7 +509,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	
@@ -518,7 +522,7 @@ public class MITLIsolverTest {
 		MITLIParser parser = new MITLIParser(tokens);
 		parser.setBuildParseTree(true);
 		MITLIFormula formula = parser.mitli().formula;
-		MITLIsolver sover = new MITLIsolver(formula, out, 5);
+		MITLIsolver sover = new MITLIsolver(formula, out, 5,  new HashMap<>(), new HashSet<>());
 		assertFalse(sover.solve());
 	}
 	

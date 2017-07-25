@@ -2,9 +2,12 @@ package solvers;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.BiMap;
 
 import formulae.cltloc.CLTLocFormula;
-import formulae.cltloc.converters.CLTLoc2Ae2zot;
 import formulae.cltloc.converters.CLTLoc2ZotDReal;
 import formulae.cltloc.visitor.CLTLoc2StringVisitor;
 import zotrunner.ZotException;
@@ -21,24 +24,30 @@ public class CLTLocsolver {
 	private long checkingspace;
 	
 	private String zotEncoding;
+	private final BiMap<Integer, String> vocabulary;
+	private final Map<String, Integer> initValues;
+	private final Set<String> flows;
 	
 	public String getZotEncoding() {
 		return zotEncoding;
 	}
 
-	public CLTLocsolver(CLTLocFormula formula, PrintStream out, int bound) {
+	public CLTLocsolver(CLTLocFormula formula, PrintStream out, int bound, BiMap<Integer, String> vocabulary, Map<String, Integer> initValues, Set<String> flows) {
 
 		this.formula = formula;
 		this.out = out;
 		this.bound = bound;
+		this.vocabulary=vocabulary;
+		this.initValues=initValues;
+		this.flows=flows;
 
 	}
 
 	public boolean solve() throws IOException, ZotException {
 		out.println("Converting the following CLTLoc formula in zot");
 		out.println(formula.accept(new CLTLoc2StringVisitor()).getKey());
-		String zotEncoding = new CLTLoc2Ae2zot(bound).apply(formula);
-//String zotEncoding = new CLTLoc2ZotDReal(bound).apply(formula);
+		//String zotEncoding = new CLTLoc2Ae2zot(bound).apply(formula);
+		String zotEncoding = new CLTLoc2ZotDReal(bound, vocabulary, initValues, flows).apply(formula);
 
 		out.println("************************************************");
 		out.println("ZOT ENCODING");

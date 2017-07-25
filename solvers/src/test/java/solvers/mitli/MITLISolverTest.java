@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -34,7 +36,7 @@ public class MITLISolverTest {
 		MITLIFormula formula = parser.mitli().formula;
 		
 		
-		MITLIsolver solver=new MITLIsolver(formula, new PrintStream(System.out),  10);
+		MITLIsolver solver=new MITLIsolver(formula, new PrintStream(System.out),  10, new HashMap<>(), new HashSet<>());
 		
 		boolean result=solver.solve();
 		
@@ -54,7 +56,7 @@ public class MITLISolverTest {
 		MITLIFormula formula = parser.mitli().formula;
 		
 		
-		MITLIsolver solver=new MITLIsolver(formula, new PrintStream(System.out),  10);
+		MITLIsolver solver=new MITLIsolver(formula, new PrintStream(System.out),  10, new HashMap<>(), new HashSet<>());
 		
 		boolean result=solver.solve();
 		

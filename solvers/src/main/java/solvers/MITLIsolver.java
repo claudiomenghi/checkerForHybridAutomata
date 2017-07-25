@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -14,9 +15,12 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import formulae.cltloc.CLTLocFormula;
 import formulae.mitli.MITLIFormula;
+import formulae.mitli.atoms.MITLIRelationalAtom;
 import formulae.mitli.converters.MITLI2CLTLoc;
 import formulae.mitli.parser.MITLILexer;
 import formulae.mitli.parser.MITLIParser;
@@ -31,12 +35,16 @@ public class MITLIsolver {
 	private CLTLocFormula cltlocFormula;
 	private Map<Integer, MITLIFormula> vocabulary;
 	private String zotEncoding;
+	private final Map<String, Integer> initValues;
+	private final Set<String> flows;
 
-	public MITLIsolver(MITLIFormula formula, PrintStream out, int bound) {
+	public MITLIsolver(MITLIFormula formula, PrintStream out, int bound, Map<String, Integer> initValues, Set<String> flows) {
 
 		this.formula = formula;
 		this.out = out;
 		this.bound = bound;
+		this.initValues=initValues;
+		this.flows=flows;
 
 	}
 
@@ -51,7 +59,15 @@ public class MITLIsolver {
 
 		this.vocabulary = converted.getVocabulary();
 		
-		CLTLocsolver solver=new CLTLocsolver(cltlocFormula, out, bound);
+		BiMap<Integer, String> vocabularyForSolver=HashBiMap.create();
+		
+		for(Entry<Integer, MITLIFormula> e: vocabulary.entrySet()){
+			if(e.getValue() instanceof MITLIRelationalAtom){
+				vocabularyForSolver.put(e.getKey(), ((MITLIRelationalAtom)e.getValue()).getString());
+			}
+		}
+		
+		CLTLocsolver solver=new CLTLocsolver(cltlocFormula, out, bound, vocabularyForSolver, this.initValues, this.flows);
 		boolean result=solver.solve();
 		this.zotEncoding=solver.getZotEncoding();
 		
@@ -98,7 +114,8 @@ public class MITLIsolver {
 
 			MITLIFormula formula = parser.mitli().formula;
 
-			MITLIsolver solver = new MITLIsolver(formula, System.out, Integer.parseInt(args[1]));
+			//TODO fix this
+			MITLIsolver solver = new MITLIsolver(formula, System.out, Integer.parseInt(args[1]), null, null);
 			solver.solve();
 
 			out.print("************************************************************************************\n");

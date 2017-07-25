@@ -1360,6 +1360,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 			}
 		}
 
+		CLTLocFormula f0=GE.apply(z1, ZERO);
 
 		
 		// Formula (2)
@@ -1382,7 +1383,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 		CLTLocFormula f3 = AND.apply(f3a, f3b);
 
 		
-		result = AND.apply(result, G.apply(AND.apply(f2, f3)));
+		result = CLTLocFormula.getAnd(result, f0, G.apply(AND.apply(f2, f3)));
 
 		
 		return result;
