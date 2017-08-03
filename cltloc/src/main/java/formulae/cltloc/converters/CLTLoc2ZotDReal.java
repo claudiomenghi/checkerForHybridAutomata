@@ -84,15 +84,12 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 		builder.append("(ae2zotdreal:zot " + bound + " (&&" + formula.accept(new CLTLoc2ZotVisitor()) + ")\n\n"
 				+ ":smt-lib :smt2 \n" 
 				+ ":gen-symbolic-val nil\n"
-				+ ":parametric-regions t \n"
-				+ ":discrete-counters nil\n"
 				+ ":over-clocks 0\n"
 				+ signalsFootBuilder.toString()+"\n"
-				+intervalsBuilder.toString()+"\n"
-				+initBuilder.toString()+"\n"
-				+flowsBuilder.toString()+"\n"
-				+ ":logic :QF_UFRDL \n" 
-				+ ":over-clocks 3 \n" + footerBuilder.toString() + " \n"
+				+ intervalsBuilder.toString()+"\n"
+				+ initBuilder.toString()+"\n"
+				+ flowsBuilder.toString()+"\n"
+				+ footerBuilder.toString() + " \n"
 				  + ")\n");
 
 		builder.append("\n");
