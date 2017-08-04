@@ -25,14 +25,14 @@ public class CLTLocsolver {
 	
 	private String zotEncoding;
 	private final BiMap<Integer, String> vocabulary;
-	private final Map<String, Integer> initValues;
+	private final Map<String, Float> initValues;
 	private final Set<String> flows;
 	
 	public String getZotEncoding() {
 		return zotEncoding;
 	}
 
-	public CLTLocsolver(CLTLocFormula formula, PrintStream out, int bound, BiMap<Integer, String> vocabulary, Map<String, Integer> initValues, Set<String> flows) {
+	public CLTLocsolver(CLTLocFormula formula, PrintStream out, int bound, BiMap<Integer, String> vocabulary, Map<String, Float> initValues, Set<String> flows) {
 
 		this.formula = formula;
 		this.out = out;

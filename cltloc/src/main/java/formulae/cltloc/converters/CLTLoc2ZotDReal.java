@@ -24,10 +24,10 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 	private final int bound;
 	
 	private final BiMap<Integer, String> vocabulary;
-	private final Map<String, Integer> initValues;
+	private final Map<String, Float> initValues;
 	private final Set<String> flows;
 	
-	public CLTLoc2ZotDReal(int bound, BiMap<Integer, String> vocabulary, Map<String, Integer> initValues, Set<String> flows) {
+	public CLTLoc2ZotDReal(int bound, BiMap<Integer, String> vocabulary, Map<String, Float> initValues, Set<String> flows) {
 		Preconditions.checkArgument(bound > 0, "The bound must be grather than zero");
 		this.bound = bound;
 		this.vocabulary=vocabulary;
@@ -69,7 +69,7 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 		
 		final StringBuilder initBuilder = new StringBuilder();
 		initBuilder.append(":init-signals '( ");
-		for(Entry<String, Integer> e: initValues.entrySet()){
+		for(Entry<String, Float> e: initValues.entrySet()){
 			initBuilder.append("("+e.getKey()+" "+e.getValue().toString()+ ")");
 		}
 		initBuilder.append(")");

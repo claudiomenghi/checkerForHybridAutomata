@@ -1,11 +1,14 @@
 package solvers;
 
+import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -35,10 +38,10 @@ public class MITLIsolver {
 	private CLTLocFormula cltlocFormula;
 	private Map<Integer, MITLIFormula> vocabulary;
 	private String zotEncoding;
-	private final Map<String, Integer> initValues;
+	private final Map<String, Float> initValues;
 	private final Set<String> flows;
 
-	public MITLIsolver(MITLIFormula formula, PrintStream out, int bound, Map<String, Integer> initValues, Set<String> flows) {
+	public MITLIsolver(MITLIFormula formula, PrintStream out, int bound, Map<String, Float> initValues, Set<String> flows) {
 
 		this.formula = formula;
 		this.out = out;
@@ -97,6 +100,8 @@ public class MITLIsolver {
 		Preconditions.checkArgument(args.length > 1,
 				"you must specify the file that contains the MITLI formula and the bound to be used");
 		Preconditions.checkArgument(Files.exists(Paths.get(args[0])), "The file: " + args[0] + " does not exist");
+		Preconditions.checkArgument(Files.exists(Paths.get(args[2])), "The file: " + args[2] + " does not exist");
+		Preconditions.checkArgument(Files.exists(Paths.get(args[3])), "The file: " + args[3] + " does not exist");
 		// Preconditions.checkArgument(args[1]!=null, "The second parameter mus
 		// be the bound to be used");
 		// Preconditions.checkArgument( Integer.getInteger(args[1])!=null,
@@ -115,7 +120,7 @@ public class MITLIsolver {
 			MITLIFormula formula = parser.mitli().formula;
 
 			//TODO fix this
-			MITLIsolver solver = new MITLIsolver(formula, System.out, Integer.parseInt(args[1]), null, null);
+			MITLIsolver solver = new MITLIsolver(formula, System.out, Integer.parseInt(args[1]), readInitValues(args[2]), readFlows(args[3]));
 			solver.solve();
 
 			out.print("************************************************************************************\n");
@@ -174,4 +179,22 @@ public class MITLIsolver {
 	public void setCltlocFormula(CLTLocFormula cltlocFormula) {
 		this.cltlocFormula = cltlocFormula;
 	}
+	
+	public static Map<String, Float> readInitValues(String filename) throws IOException{
+		Map<String, Float> m = new HashMap<String, Float>();
+		
+		List<String> contents = FileUtils.readLines(new File(filename));
+		for (String line : contents) 
+			m.put(line.split("=")[0], new Float(line.split("=")[1]));
+		
+		return m;
+	}
+	
+	public static Set<String> readFlows(String filename) throws IOException{
+		
+		List<String> contents = FileUtils.readLines(new File(filename));
+		
+		return new HashSet<String>(contents);
+	}
+	
 }
