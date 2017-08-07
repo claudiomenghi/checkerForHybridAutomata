@@ -15,6 +15,7 @@ import zotrunner.ZotRunner;
 
 public class CLTLocsolver {
 	private final CLTLocFormula formula;
+	private Set<CLTLocFormula> formulae;
 	private final PrintStream out;
 	private final int bound;
 
@@ -35,20 +36,26 @@ public class CLTLocsolver {
 	public CLTLocsolver(CLTLocFormula formula, PrintStream out, int bound, BiMap<Integer, String> vocabulary, Map<String, Float> initValues, Set<String> flows) {
 
 		this.formula = formula;
+		this.formulae = null;
 		this.out = out;
 		this.bound = bound;
 		this.vocabulary=vocabulary;
 		this.initValues=initValues;
 		this.flows=flows;
-
+	}
+	
+	public CLTLocsolver(Set<CLTLocFormula> formulae, PrintStream out, int bound, BiMap<Integer, String> vocabulary, Map<String, Float> initValues, Set<String> flows) {
+		this((CLTLocFormula)null, out, bound, vocabulary, initValues, flows);
+		this.formulae = formulae;
 	}
 
 	public boolean solve() throws IOException, ZotException {
 		out.println("Converting the following CLTLoc formula in zot");
 		out.println(formula.accept(new CLTLoc2StringVisitor()).getKey());
 		//String zotEncoding = new CLTLoc2Ae2zot(bound).apply(formula);
-		String zotEncoding = new CLTLoc2ZotDReal(bound, vocabulary, initValues, flows).apply(formula);
-
+		//String zotEncoding = new CLTLoc2ZotDReal(bound, vocabulary, initValues, flows).apply(formula);
+		String zotEncoding = new CLTLoc2ZotDReal(bound, vocabulary, initValues, flows).apply(formulae);
+		
 		out.println("************************************************");
 		out.println("ZOT ENCODING");
 		out.println(zotEncoding);
