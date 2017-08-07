@@ -96,4 +96,9 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 
 		return builder.toString();
 	}
+	
+	
+	public String apply(Set<CLTLocFormula> set){
+		return null;
+	}
 }

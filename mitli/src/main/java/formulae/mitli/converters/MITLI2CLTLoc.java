@@ -124,4 +124,8 @@ public class MITLI2CLTLoc {
 		);
 	}
 
+	public Set<CLTLocFormula> getCLTLocFormulae() {
+		return null;
+	}
+
 }
