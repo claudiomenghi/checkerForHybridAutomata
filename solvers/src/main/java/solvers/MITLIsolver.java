@@ -36,10 +36,12 @@ public class MITLIsolver {
 	private final int bound;
 
 	private CLTLocFormula cltlocFormula;
+	private Set<CLTLocFormula> cltlocFormulae;
 	private Map<Integer, MITLIFormula> vocabulary;
 	private String zotEncoding;
 	private final Map<String, Float> initValues;
 	private final Set<String> flows;
+	
 
 	public MITLIsolver(MITLIFormula formula, PrintStream out, int bound, Map<String, Float> initValues, Set<String> flows) {
 
@@ -71,6 +73,42 @@ public class MITLIsolver {
 		}
 		
 		CLTLocsolver solver=new CLTLocsolver(cltlocFormula, out, bound, vocabularyForSolver, this.initValues, this.flows);
+		boolean result=solver.solve();
+		this.zotEncoding=solver.getZotEncoding();
+		
+		
+		StringBuilder vocabularyBuilder = new StringBuilder();
+		this.vocabulary.entrySet().forEach(e -> vocabularyBuilder.append(e.getValue() + "\t" + e.getKey() + "\n"));
+		
+		out.println("Vocabulary:");
+		out.println(vocabularyBuilder.toString());
+		FileUtils.writeStringToFile(new File("vocabulary.txt"), vocabularyBuilder.toString());
+
+		return result;
+
+	}
+	
+	
+	public boolean solve2() throws IOException, ZotException {
+
+		out.println("Transforming the MITLI formula in CLTLoc");
+		out.println("Formula: " + formula);
+		MITLI2CLTLoc converted = new MITLI2CLTLoc(formula, bound);
+
+		cltlocFormulae = converted.getCLTLocFormulae();
+		converted.printFancy(out);
+
+		this.vocabulary = converted.getVocabulary();
+		
+		BiMap<Integer, String> vocabularyForSolver=HashBiMap.create();
+		
+		for(Entry<Integer, MITLIFormula> e: vocabulary.entrySet()){
+			if(e.getValue() instanceof MITLIRelationalAtom){
+				vocabularyForSolver.put(e.getKey(), ((MITLIRelationalAtom)e.getValue()).getString());
+			}
+		}
+		
+		CLTLocsolver solver=new CLTLocsolver(cltlocFormulae, out, bound, vocabularyForSolver, this.initValues, this.flows);
 		boolean result=solver.solve();
 		this.zotEncoding=solver.getZotEncoding();
 		
@@ -119,9 +157,9 @@ public class MITLIsolver {
 
 			MITLIFormula formula = parser.mitli().formula;
 
-			//TODO fix this
+			
 			MITLIsolver solver = new MITLIsolver(formula, System.out, Integer.parseInt(args[1]), readInitValues(args[2]), readFlows(args[3]));
-			solver.solve();
+			solver.solve2();
 
 			out.print("************************************************************************************\n");
 			// Writing the CLTLoc formula
