@@ -30,6 +30,10 @@ public class ZotRunner {
 		this.zotEncoding = zotEncoding;
 		this.out = out;
 	}
+	
+	public String getZotEncoding(){
+		return this.zotEncoding;
+	}
 
 	public boolean run() throws IOException, ZotException {
 		String lispFile = "tmp.zot";

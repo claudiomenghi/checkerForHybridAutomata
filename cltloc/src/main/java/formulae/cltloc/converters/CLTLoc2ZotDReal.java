@@ -1,11 +1,14 @@
 package formulae.cltloc.converters;
 
 import java.util.Set;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.BiMap;
 
 import formulae.cltloc.CLTLocFormula;
 import formulae.cltloc.atoms.CLTLocClock;
@@ -19,10 +22,17 @@ import formulae.cltloc.visitor.GetVariablesVisitor;
 public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 
 	private final int bound;
-
-	public CLTLoc2ZotDReal(int bound) {
+	
+	private final BiMap<Integer, String> vocabulary;
+	private final Map<String, Float> initValues;
+	private final Set<String> flows;
+	
+	public CLTLoc2ZotDReal(int bound, BiMap<Integer, String> vocabulary, Map<String, Float> initValues, Set<String> flows) {
 		Preconditions.checkArgument(bound > 0, "The bound must be grather than zero");
 		this.bound = bound;
+		this.vocabulary=vocabulary;
+		this.initValues=initValues;
+		this.flows=flows;
 	}
 
 	public String apply(CLTLocFormula formula) {
@@ -41,18 +51,48 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 
 		
 		final StringBuilder footerBuilder = new StringBuilder();
-		footerBuilder.append(":signals '(" + StringUtils.join(signals, ' ') + ")");
+		footerBuilder.append(":signals '(" + StringUtils.join(signals, ' ') + ")\n");
 		
-		footerBuilder.append(":discrete-counters '(" + StringUtils.join(variables, ' ') + ")");
+		footerBuilder.append(":discrete-counters '(" + StringUtils.join(variables, ' ') + ")\n");
 
+		final StringBuilder signalsFootBuilder = new StringBuilder();
+		
+		signalsFootBuilder.append(":signals '(" + StringUtils.join(signals, ' ') + ")");
+		
+		final StringBuilder intervalsBuilder = new StringBuilder();
+		
+		intervalsBuilder.append(":mtl-intervals '(" );
+		for(Entry<Integer, String> e: vocabulary.entrySet()){
+			intervalsBuilder.append("(H_"+e.getKey().toString()+" "+e.getValue()+")");
+		}
+		intervalsBuilder.append(")");
+		
+		final StringBuilder initBuilder = new StringBuilder();
+		initBuilder.append(":init-signals '( ");
+		for(Entry<String, Float> e: initValues.entrySet()){
+			initBuilder.append("("+e.getKey()+" "+e.getValue().toString()+ ")");
+		}
+		initBuilder.append(")");
+		
+		final StringBuilder flowsBuilder = new StringBuilder();
+		flowsBuilder.append(":flows '( ");
+		for(String flow: flows){
+			flowsBuilder.append("("+flow+ ")");
+		}
+		flowsBuilder.append(")");
 		
 		builder.append("(ae2zotdreal:zot " + bound + " (&&" + formula.accept(new CLTLoc2ZotVisitor()) + ")\n\n"
-				+ ":smt-lib :smt2 \n" + ":logic :QF_UFRDL \n" + ":over-clocks 3 \n" + footerBuilder.toString() + " \n"
-				+ ":parametric-regions t \n" + ":gen-symbolic-val nil\n" + ")\n");
+				+ ":smt-lib :smt2 \n" 
+				+ ":gen-symbolic-val nil\n"
+				+ ":over-clocks 0\n"
+				+ signalsFootBuilder.toString()+"\n"
+				+ intervalsBuilder.toString()+"\n"
+				+ initBuilder.toString()+"\n"
+				+ flowsBuilder.toString()+"\n"
+				+ footerBuilder.toString() + " \n"
+				  + ")\n");
 
 		builder.append("\n");
-		
-		
 
 		return builder.toString();
 	}

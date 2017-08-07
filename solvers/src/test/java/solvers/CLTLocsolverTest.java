@@ -5,9 +5,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import org.junit.Test;
 
+import com.google.common.collect.HashBiMap;
 import com.google.common.io.ByteStreams;
 
 import formulae.cltloc.CLTLocFormula;
@@ -35,7 +38,7 @@ public class CLTLocsolverTest {
 		CLTLocFormula f = CLTLocFormula.getAnd(ap, CLTLocFormula.getNeg(ap));
 
 		assertFalse("a contradiction should return unsat",
-				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 
 	@Test
@@ -43,7 +46,7 @@ public class CLTLocsolverTest {
 
 		CLTLocFormula assignment = new CLTLocRelation(new Variable("x"), new Constant(0), Relation.EQ);
 
-		assertTrue("a contradiction should return unsat", new CLTLocsolver(assignment, out, 5).solve());
+		assertTrue("a contradiction should return unsat", new CLTLocsolver(assignment, out, 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 
 	
@@ -54,7 +57,7 @@ public class CLTLocsolverTest {
 		CLTLocFormula f = new CLTLocYesterday(MITLI2CLTLocVisitor.ORIGIN);
 
 		assertTrue("a contradiction should return unsat",
-				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 
 	@Test
@@ -64,7 +67,7 @@ public class CLTLocsolverTest {
 		CLTLocFormula f = new CLTLocYesterday(new CLTLocNext(MITLI2CLTLocVisitor.ORIGIN));
 		
 		assertFalse("a contradiction should return unsat",
-				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 	
 	@Test
@@ -74,7 +77,7 @@ public class CLTLocsolverTest {
 		CLTLocFormula f = new CLTLocYesterday(new CLTLocNext(new CLTLocNext(MITLI2CLTLocVisitor.ORIGIN)));
 		
 		assertFalse("a contradiction should return unsat",
-				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 	
 	
@@ -86,7 +89,7 @@ public class CLTLocsolverTest {
 				new CLTLocYesterday(new CLTLocAP("tmp")));
 		
 		assertFalse("a contradiction should return unsat",
-				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 	
 	@Test
@@ -96,7 +99,7 @@ public class CLTLocsolverTest {
 		CLTLocFormula f = MITLI2CLTLocVisitor.ORIGIN;
 		
 		assertFalse("a contradiction should return unsat",
-				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 	
 	@Test
@@ -108,7 +111,7 @@ public class CLTLocsolverTest {
 				(MITLI2CLTLocVisitor.ORIGIN)));
 		
 		assertFalse("a contradiction should return unsat",
-				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 	
 	@Test
@@ -119,7 +122,7 @@ public class CLTLocsolverTest {
 		CLTLocFormula f = CLTLocFormula.getAnd(ap, assignment);
 
 		assertTrue("a contradiction should return unsat",
-				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(f, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 	
 	
@@ -138,7 +141,7 @@ public class CLTLocsolverTest {
 		
 		CLTLocFormula checked=CLTLocFormula.getAnd(h0, init, rel1,rel2);
 		assertFalse("a contradiction should return unsat",
-				new CLTLocsolver(checked, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(checked, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 	
 	
@@ -148,7 +151,7 @@ public class CLTLocsolverTest {
 		CLTLocFormula h0 = new CLTLocAP("H_0");
 		CLTLocFormula checked=MITLI2CLTLocVisitor.Y.apply(h0);
 		assertTrue("Y(H_0) should be sat",
-				new CLTLocsolver(checked, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(checked, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 	
 	@Test
@@ -157,7 +160,7 @@ public class CLTLocsolverTest {
 		CLTLocFormula h0 = new CLTLocAP("H_0");
 		CLTLocFormula checked= CLTLocFormula.getAnd(h0, MITLI2CLTLocVisitor.Y.apply(h0));
 		assertTrue("Y(H_0) should be sat",
-				new CLTLocsolver(checked, new PrintStream(ByteStreams.nullOutputStream()), 5).solve());
+				new CLTLocsolver(checked, new PrintStream(ByteStreams.nullOutputStream()), 5, HashBiMap.create(), new HashMap<>(), new HashSet<>()).solve());
 	}
 	
 	
@@ -165,7 +168,7 @@ public class CLTLocsolverTest {
 	public void origin() throws IOException, ZotException {
 		CLTLocFormula checked=MITLI2CLTLocVisitor.ORIGIN;
 		
-		CLTLocsolver solver=new CLTLocsolver(checked, new PrintStream(System.out), 15);
+		CLTLocsolver solver=new CLTLocsolver(checked, new PrintStream(System.out), 15, HashBiMap.create(), new HashMap<>(), new HashSet<>());
 		
 		boolean result=solver.solve();
 		

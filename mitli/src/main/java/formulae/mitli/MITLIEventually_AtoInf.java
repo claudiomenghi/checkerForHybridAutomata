@@ -47,6 +47,6 @@ public class MITLIEventually_AtoInf extends MITLIEventually implements Temporize
 	 */
 	@Override
 	public String toString() {
-		return "(" + this.operator + "[" + String.valueOf(a) + ",+oo]" + this.getChild() + ")";
+		return "(" + this.operator + "(" + String.valueOf(a) + ",+oo)" + this.getChild() + ")";
 	}
 }

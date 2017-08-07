@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -30,7 +32,7 @@ public class APSigTest {
 		MITLIFormula formula = parser.mitli().formula;
 		
 		
-		MITLIsolver solver=new MITLIsolver(formula, new PrintStream(System.out),  100);
+		MITLIsolver solver=new MITLIsolver(formula, new PrintStream(System.out),  100, new HashMap<>(), new HashSet<>());
 		
 		boolean result=solver.solve();
 		

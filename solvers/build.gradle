@@ -4,6 +4,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'antlr'
 apply plugin:'application'
+mainClassName = "solvers.MITLIsolver"
 
 
 
@@ -35,12 +36,8 @@ sourceSets {
 }
 
  
- task solve (type: JavaExec){
-main = "solvers.MITLIsolver"
- classpath = sourceSets.main.runtimeClasspath
-  	   	  	 	 	mainClassName = "solvers.MITLIsover"
-    description = "Runs the MITLI framework"
-     if (project.hasProperty("appArgs")) {
+run {
+    if (project.hasProperty("appArgs")) {
         args Eval.me(appArgs)
     }
 }
@@ -58,7 +55,6 @@ dependencies {
 	compile group: 'com.beust', name: 'jcommander', version: '1.58'
 	 compile project(':cltloc')
 	 compile project(':mitli')
-	 compile project(':timedAutomata')
 	 compile group: 'commons-io', name: 'commons-io', version: '2.4'
 	 compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
  	compile group: 'com.google.guava', name: 'guava', version: '15.0'

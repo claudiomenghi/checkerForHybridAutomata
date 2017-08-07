@@ -47,7 +47,7 @@ public class MITLIGlobally_AtoInf extends MITLIGlobally implements TemporizedFor
 	 */
 	@Override
 	public String toString() {
-		return "(" + this.operator + "[" + String.valueOf(a) + ",+oo]" + this.getChild() + ")";
+		return "(" + this.operator + "(" + String.valueOf(a) + ",+oo)" + this.getChild() + ")";
 	}
 	
 	

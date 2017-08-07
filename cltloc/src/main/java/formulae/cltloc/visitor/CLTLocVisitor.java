@@ -1,11 +1,10 @@
 package formulae.cltloc.visitor;
 
+import formulae.cltloc.atoms.CLTLocAP;
 import formulae.cltloc.atoms.CLTLocClock;
 import formulae.cltloc.atoms.Constant;
-import formulae.cltloc.atoms.KeepVariableConstant;
 import formulae.cltloc.atoms.Signal;
 import formulae.cltloc.atoms.Variable;
-import formulae.cltloc.atoms.CLTLocAP;
 import formulae.cltloc.operators.binary.CLTLocConjunction;
 import formulae.cltloc.operators.binary.CLTLocDisjunction;
 import formulae.cltloc.operators.binary.CLTLocIff;
@@ -165,6 +164,5 @@ public interface CLTLocVisitor<T> {
 
 	public T visit(Variable cltLocVariable);
 
-	public T visit(KeepVariableConstant keepVariableConstant);
 
 }

@@ -17,3 +17,6 @@ bin/*
 *.lisp
 *.cltloc
 *.vocabulary
+/bin/
+vocabulary.txt
+*.zot
