@@ -1,5 +1,7 @@
 package formulae.cltloc.visitor;
 
+import com.google.common.base.Strings;
+
 import formulae.cltloc.atoms.CLTLocAP;
 import formulae.cltloc.atoms.CLTLocClock;
 import formulae.cltloc.atoms.Constant;
@@ -26,13 +28,27 @@ import formulae.cltloc.relations.CLTLocRelation;
  * @author Claudio Menghi
  */
 public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
+	
+	private int level;
+	private boolean unaryParent;
+	
+	public CLTLoc2ZotVisitor(){
+		level = 1;
+		unaryParent = false;
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String visit(CLTLocConjunction formula) {
-		return "(&&" + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = false;
+		String result = "\n" + Strings.repeat("\t", level-1) + "(&&" + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -40,7 +56,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocNegation formula) {
-		return "(!! " + formula.getChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = true;
+		String result = "\n" + Strings.repeat("\t", level-1) + "(!!" + formula.getChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -48,7 +70,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocUntil formula) {
-		return "(until " + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = false;
+		String result =  "\n" + Strings.repeat("\t", level) + "(until" + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -56,7 +84,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocImplies formula) {
-		return "(-> " + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = false;
+		String result =  "\n" + Strings.repeat("\t", level-1) + "(->" + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -64,7 +98,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocIff formula) {
-		return "(<-> " + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = false;
+		String result =  "\n" + Strings.repeat("\t", level-1) + "(<->" + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -72,7 +112,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocNext formula) {
-		return "(next " + formula.getChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = true;
+		String result =  "\n" + Strings.repeat("\t", level-1) + "(next" + formula.getChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -80,7 +126,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocGlobally formula) {
-		return "(alwf " + formula.getChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = true;
+		String result =  "\n" + Strings.repeat("\t", level-1) + "(alwf" + formula.getChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -88,7 +140,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocEventually eventually) {
-		return "(somf " + eventually.getChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = true;
+		String result =  "\n" + Strings.repeat("\t", level-1) + "(somf" + eventually.getChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -96,7 +154,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocSince formula) {
-		return "(since " + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = false;
+		String result =  "\n" + Strings.repeat("\t", level-1) + "(since" + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -104,7 +168,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocYesterday formula) {
-		return "(yesterday " + formula.getChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = true;
+		String result =  "\n" + Strings.repeat("\t", level-1) + "(yesterday" + formula.getChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -112,7 +182,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocRelease formula) {
-		return "(release " + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = false;
+		String result =  "\n" + Strings.repeat("\t", level-1) + "(release" + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -120,7 +196,10 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocRelation formula) {
-		return "([" + formula.getRelation() + "] " + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		level++;
+		String result = "\n" + Strings.repeat("\t", level-1) + "([" + formula.getRelation() + "] " + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		level--;
+		return result;
 	}
 
 	/**
@@ -128,7 +207,13 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	 */
 	@Override
 	public String visit(CLTLocDisjunction formula) {
-		return "(||" + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		level++;
+		boolean old = unaryParent;
+ 		unaryParent = false;
+		String result =  "\n" + Strings.repeat("\t", level-1) + "(||" + formula.getLeftChild().accept(this) + " " + formula.getRightChild().accept(this) + ")";
+		unaryParent = old;
+		level--;
+		return result;
 	}
 
 	/**
@@ -137,12 +222,15 @@ public class CLTLoc2ZotVisitor implements CLTLocVisitor<String> {
 	@Override
 	public String visit(CLTLocAP cltLocAP) {
 		if(cltLocAP.equals(CLTLocAP.TRUE)){
-			return "'true";
+			return " 'true";
 		}
 		if(cltLocAP.equals(CLTLocAP.FALSE)){
-			return "'false";
+			return " 'false";
 		}
-		return "(-P- " + cltLocAP.toString() + ")";
+		if (unaryParent)
+			return " " + "(-P- " + cltLocAP.toString() + ")";
+		else
+			return "\n" + Strings.repeat("\t", level) + "(-P- " + cltLocAP.toString() + ")";
 	}
 
 	/**
