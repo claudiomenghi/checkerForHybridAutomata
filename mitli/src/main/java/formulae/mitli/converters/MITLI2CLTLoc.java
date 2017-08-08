@@ -1,7 +1,10 @@
 package formulae.mitli.converters;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -125,7 +128,50 @@ public class MITLI2CLTLoc {
 	}
 
 	public Set<CLTLocFormula> getCLTLocFormulae() {
-		return null;
+
+		this.populateParentRelation(formula);
+		
+		// Instantiate the set of CLTLoc formulae
+		List<CLTLocFormula> cltlocFormulae = new ArrayList<CLTLocFormula>();
+
+		// Add initial formula
+		cltlocFormulae.add(MITLI2CLTLocVisitor.first.apply(visitor.formulaIdMap.get(formula)));
+
+		CLTLocFormula conjunction = CLTLocFormula.TRUE;
+		for (MITLIFormula f : formula.accept(new SubformulaeVisitor())) {
+
+			CLTLocFormula f1 = visitor.getckTheta(f, parentRelation);
+			CLTLocFormula f2 = f.accept(visitor);
+			
+			CLTLocFormula formula = MITLI2CLTLocVisitor.AND.apply(f1, f2);
+			this.generatedFormulaMap.put(f, f1);
+			this.clockcontraintFormulaMap.put(f, f2);
+			
+			// Add CLTLoc formula related to MITL formula f  
+			cltlocFormulae.add(formula);
+		
+		}
+
+		// Add CLTLoc formula related to clock Now   
+		cltlocFormulae.add(CLTLocFormula.getAnd(
+						new CLTLocEQRelation(new CLTLocClock("Now"), new Constant(0)),
+						new CLTLocNext(new CLTLocGlobally(new CLTLocGERelation(new CLTLocClock("Now"), new Constant(0))))));
+		
+		/*
+		Set<CLTLocClock> clocks = conjunction.accept(new GetClocksVisitor());
+		
+		CLTLocFormula clockConstraint=CLTLocFormula.TRUE;
+		
+		for(CLTLocClock clock:  clocks){
+			clockConstraint=CLTLocFormula.getAnd(clockConstraint, new CLTLocGEQRelation(clock, new Constant(0)));
+		}
+				
+				
+		CLTLocFormula formula = CLTLocFormula.getAnd( nowConstraint, clockConstraint, init, conjunction);
+		*/
+		
+		converted = true;
+		return new HashSet<CLTLocFormula>(cltlocFormulae);
 	}
 
 }
