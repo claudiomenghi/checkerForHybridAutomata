@@ -111,6 +111,7 @@ public class MITLIsolver {
 		CLTLocsolver solver=new CLTLocsolver(cltlocFormulae, out, bound, vocabularyForSolver, this.initValues, this.flows);
 		boolean result=solver.solve();
 		this.zotEncoding=solver.getZotEncoding();
+		this.cltlocFormula = new MITLI2CLTLoc(formula,bound).apply();
 		
 		
 		StringBuilder vocabularyBuilder = new StringBuilder();
@@ -170,8 +171,7 @@ public class MITLIsolver {
 				cltlocFile = fileOutName.concat(".cltloc");
 			}
 
-			FileUtils.writeStringToFile(new File(cltlocFile),
-					solver.getCltlocFormula().toString());
+			FileUtils.writeStringToFile(new File(cltlocFile), solver.getCltlocFormula().toString());
 			out.println("CLTLoc formula written in the file " + cltlocFile);
 
 			// Writing the vocabulary
