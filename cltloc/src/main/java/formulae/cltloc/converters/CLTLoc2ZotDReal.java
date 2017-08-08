@@ -1,6 +1,7 @@
 package formulae.cltloc.converters;
 
 import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
@@ -81,7 +82,7 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 		}
 		flowsBuilder.append(")");
 		
-		builder.append("(ae2zotdreal:zot " + bound + " (&&" + formula.accept(new CLTLoc2ZotVisitor()) + ")\n\n"
+		builder.append("(ae2zotdreal:zot " + bound + "(yesterday (&&" + formula.accept(new CLTLoc2ZotVisitor()) + "))\n\n"
 				+ ":smt-lib :smt2 \n" 
 				+ ":gen-symbolic-val nil\n"
 				+ ":over-clocks 0\n"
@@ -99,6 +100,80 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 	
 	
 	public String apply(Set<CLTLocFormula> set){
-		return null;
+		final StringBuilder builder = new StringBuilder();
+		builder.append("(asdf:operate 'asdf:load-op 'ae2zotdreal)");
+		builder.append("(use-package :trio-utils)\n");
+
+		Set<CLTLocClock> clocks = new HashSet<CLTLocClock>();
+		for (CLTLocFormula formula: set){
+			clocks.addAll(formula.accept(new GetClocksVisitor()));
+		}
+		clocks.forEach(clock -> builder.append("(define-tvar " + clock.toString() + " *real*)\n"));
+
+		//Set<Signal> signals = formula.accept(new GetSignalVisitor());
+		Set<Signal> signals = new HashSet<Signal>();
+		for (CLTLocFormula formula: set){
+			signals.addAll(formula.accept(new GetSignalVisitor()));
+		}
+		signals.forEach(signal -> builder.append("(define-tvar " + signal.toString() + " *real*)\n"));
+
+		
+		final StringBuilder formulaBuilder = new StringBuilder();
+		formulaBuilder.append("(&&");
+		
+		int i=0;
+		for (CLTLocFormula formula: set){
+			
+			// Write the definition of Lisp constant fn (defconstant fn '(...))
+			builder.append("(defconstant f" + String.valueOf(i));
+			builder.append(formula.accept(new CLTLoc2ZotVisitor()));
+			builder.append(")\n\n");
+			
+			// Write the final formula with fn instances
+			formulaBuilder.append(" f" + String.valueOf(i));
+			i++;
+		}
+		formulaBuilder.append(")");
+		
+		
+		final StringBuilder signalsFootBuilder = new StringBuilder();		
+		signalsFootBuilder.append(":signals '(" + StringUtils.join(signals, ' ') + ")");
+		
+		final StringBuilder intervalsBuilder = new StringBuilder();		
+		intervalsBuilder.append(":mtl-intervals '(" );
+		for(Entry<Integer, String> e: vocabulary.entrySet()){
+			intervalsBuilder.append("(H_"+e.getKey().toString()+" "+e.getValue()+")");
+		}
+		intervalsBuilder.append(")");
+		
+		final StringBuilder initBuilder = new StringBuilder();
+		initBuilder.append(":init-signals '( ");
+		for(Entry<String, Float> e: initValues.entrySet()){
+			initBuilder.append("("+e.getKey()+" "+e.getValue().toString()+ ")");
+		}
+		initBuilder.append(")");
+		
+		final StringBuilder flowsBuilder = new StringBuilder();
+		flowsBuilder.append(":flows '( ");
+		for(String flow: flows){
+			flowsBuilder.append("("+flow+ ")");
+		}
+		flowsBuilder.append(")");
+		
+		
+		
+		builder.append("(ae2zotdreal:zot " + bound + " " + formulaBuilder.toString() + "\n\n"
+				+ ":smt-lib :smt2 \n" 
+				+ ":gen-symbolic-val nil\n"
+				+ ":over-clocks 0\n"
+				+ signalsFootBuilder.toString()+"\n"
+				+ intervalsBuilder.toString()+"\n"
+				+ initBuilder.toString()+"\n"
+				+ flowsBuilder.toString()+"\n"
+				+ ")\n");
+
+		builder.append("\n");
+
+		return builder.toString();
 	}
 }
