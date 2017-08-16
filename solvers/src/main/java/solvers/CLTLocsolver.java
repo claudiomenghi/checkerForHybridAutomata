@@ -51,7 +51,7 @@ public class CLTLocsolver {
 
 	public boolean solve() throws IOException, ZotException {
 		out.println("Converting the following CLTLoc formula in zot");
-		out.println(formula.accept(new CLTLoc2StringVisitor()).getKey());
+		//out.println(formula.accept(new CLTLoc2StringVisitor()).getKey());
 		//String zotEncoding = new CLTLoc2Ae2zot(bound).apply(formula);
 		//String zotEncoding = new CLTLoc2ZotDReal(bound, vocabulary, initValues, flows).apply(formula);
 		String zotEncoding = new CLTLoc2ZotDReal(bound, vocabulary, initValues, flows).apply(formulae);
