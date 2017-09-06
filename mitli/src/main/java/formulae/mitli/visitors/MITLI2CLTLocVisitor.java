@@ -136,15 +136,20 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 
 	
 	public static final Function<Integer, CLTLocFormula> beforeDownNowUp = (s) -> 
-		CLTLocFormula.getOr(high.apply(s),		upSingularity.apply(s), CLTLocFormula.getAnd(
-					ORIGIN, first.apply(s)), CLTLocFormula.getAnd(END, first.apply(s)));
+		CLTLocFormula.getOr(
+				high.apply(s),
+				upSingularity.apply(s), 
+				CLTLocFormula.getAnd(ORIGIN, first.apply(s)), 
+				CLTLocFormula.getAnd(END, first.apply(s), CLTLocFormula.getNeg(new CLTLocYesterday(rest.apply(s)))));
 
 
 
-	public static final Function<Integer, CLTLocFormula> beforeUpNowDown = (s) -> CLTLocFormula.getOr(low.apply(s),
+	public static final Function<Integer, CLTLocFormula> beforeUpNowDown = (s) -> 
+		CLTLocFormula.getOr(
+			low.apply(s),
 			downSingularity.apply(s),
-					CLTLocFormula.getAnd(ORIGIN, CLTLocFormula.getNeg(first.apply(s))),
-					CLTLocFormula.getAnd(END, CLTLocFormula.getNeg(first.apply(s))));
+			CLTLocFormula.getAnd(ORIGIN, CLTLocFormula.getNeg(first.apply(s))),
+			CLTLocFormula.getAnd(END, CLTLocFormula.getNeg(first.apply(s)), new CLTLocYesterday(rest.apply(s))));
 	
 	
 
@@ -1365,9 +1370,11 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 		
 		// Formula (2)
 		 CLTLocFormula f2 =
-		 IFF.apply(OR.apply(beforeDownNowUp.apply(idFormula),
-		 beforeUpNowDown.apply(idFormula)),
-		 OR.apply(EQ.apply(z0, ZERO), EQ.apply(z1, ZERO)));
+		 IFF.apply(
+				 OR.apply(
+						 beforeDownNowUp.apply(idFormula),
+						 beforeUpNowDown.apply(idFormula)),
+				 OR.apply(EQ.apply(z0, ZERO), EQ.apply(z1, ZERO)));
 
 		 
 		 
