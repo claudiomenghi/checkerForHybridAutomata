@@ -78,9 +78,9 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 		final StringBuilder flowsBuilder = new StringBuilder();
 		flowsBuilder.append(":flows '( ");
 		for(String flow: flows){
-			flowsBuilder.append("("+flow+ ")");
+			flowsBuilder.append(flow);
 		}
-		flowsBuilder.append(")");
+		flowsBuilder.append(" )");
 		
 		builder.append("(ae2zotdreal:zot " + bound + "(yesterday (&&" + formula.accept(new CLTLoc2ZotVisitor()) + "))\n\n"
 				+ ":smt-lib :smt2 \n" 
@@ -114,6 +114,10 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 		Set<Signal> signals = new HashSet<Signal>();
 		for (CLTLocFormula formula: set){
 			signals.addAll(formula.accept(new GetSignalVisitor()));
+		}
+		// This might happen when the formula does not include signals
+		if (signals.isEmpty()){
+			initValues.keySet().forEach(signal -> signals.add(new Signal(signal.toString())));
 		}
 		signals.forEach(signal -> builder.append("(define-tvar " + signal.toString() + " *real*)\n"));
 
@@ -156,9 +160,9 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 		final StringBuilder flowsBuilder = new StringBuilder();
 		flowsBuilder.append(":flows '( ");
 		for(String flow: flows){
-			flowsBuilder.append("("+flow+ ")");
+			flowsBuilder.append(flow);
 		}
-		flowsBuilder.append(")");
+		flowsBuilder.append(" )");
 		
 		
 		
