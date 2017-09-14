@@ -166,7 +166,7 @@ public class CLTLoc2ZotDReal implements Function<CLTLocFormula, String> {
 		
 		
 		
-		builder.append("(ae2zotdreal:zot " + bound + " " + formulaBuilder.toString() + "\n\n"
+		builder.append("(ae2zotdreal:zot " + bound + " (yesterday " + formulaBuilder.toString() + ") " + "\n\n"
 				+ ":smt-lib :smt2 \n" 
 				+ ":gen-symbolic-val nil\n"
 				+ ":over-clocks 0\n"
