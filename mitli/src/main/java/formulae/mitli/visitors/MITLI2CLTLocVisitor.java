@@ -351,13 +351,13 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 																												GE.apply(z0, ZERO), 
 																												LE.apply(z0, new Constant(b))
 																															
-																												),
+																												), 
 																											AND.apply(
 																													rest.apply(childId),
 																													ORIGIN)
 																											)
 																				)
-														),
+														), //CLTLocFormula.TRUE
 														AND.apply(
 																	NEG.apply(first.apply(formulaId)),
 																	X.apply(
@@ -371,8 +371,8 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 																								)
 																								)
 																						)
-																	)
-													)
+																	) 
+													) 
 											)
 										),
 					CLTLocFormula.getAnd(
@@ -412,7 +412,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 										 )
 								 )
 						)
-				 )
+				 ) 
 			)
 		);
 
@@ -482,7 +482,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 								)
 					);
 
-		return G.apply(CLTLocFormula.getAnd(f7, f8, f9, f10, f11));
+		return G.apply(CLTLocFormula.getAnd(f8));
 		
 	}
 
@@ -1387,10 +1387,10 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 				CLTLocFormula.getOr( END,
 						X.apply(R.apply(EQ.apply(z0, ZERO), GE.apply(z1, ZERO)))));
 
-		CLTLocFormula f3 = AND.apply(f3a, f3b);
-
+		CLTLocFormula f4 = IMPL.apply(EQ.apply(z0, ZERO), CLTLocFormula.getNeg(EQ.apply(z1, ZERO))); 
 		
-		result = CLTLocFormula.getAnd(result, f0, G.apply(AND.apply(f2, f3)));
+		
+		result = CLTLocFormula.getAnd(result, f0, G.apply(CLTLocFormula.getAnd(f2, f3a, f3b, f4)));
 
 		
 		return result;
@@ -1424,7 +1424,10 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 			f = CLTLocFormula.TRUE;
 		}
 		
-		return IFF.apply(CLTLocFormula.getOr(first.apply(formulaIdMap.get(formula)), rest.apply(formulaIdMap.get(formula))), f);
+		//return IFF.apply(CLTLocFormula.getOr(first.apply(formulaIdMap.get(formula)), rest.apply(formulaIdMap.get(formula))), f);
+		
+		// We disable the translation of relations over atoms as they are managed by Zot
+		return CLTLocFormula.TRUE;
 	}
 
 }
