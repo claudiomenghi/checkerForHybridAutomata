@@ -313,7 +313,8 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 	 */
 	@Override
 	public CLTLocFormula visit(MITLIPropositionalAtom formula) {
-		return CLTLocFormula.TRUE;
+		
+		return this.getFinalConstraints(formula);
 	}
 
 	/**
@@ -482,7 +483,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 								)
 					);
 
-		return G.apply(CLTLocFormula.getAnd(f8));
+		return G.apply(CLTLocFormula.getAnd(f8, f9, f10, f11, this.getFinalConstraints(formula)));
 		
 	}
 
@@ -1396,6 +1397,13 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 		return result;
 	}
 
+	
+	private CLTLocFormula getFinalConstraints(MITLIFormula formula) {
+		int idFormula = formulaIdMap.get(formula);
+		
+		return CLTLocFormula.getNeg(CLTLocFormula.getAnd(END, rest.apply(idFormula)));
+	}
+	
 	@Override
 	public CLTLocFormula visit(MITLIRelationalAtom formula) {
 
@@ -1427,7 +1435,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 		//return IFF.apply(CLTLocFormula.getOr(first.apply(formulaIdMap.get(formula)), rest.apply(formulaIdMap.get(formula))), f);
 		
 		// We disable the translation of relations over atoms as they are managed by Zot
-		return CLTLocFormula.TRUE;
+		return this.getFinalConstraints(formula);
 	}
 
 }
