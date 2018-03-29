@@ -483,7 +483,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 								)
 					);
 
-		return G.apply(CLTLocFormula.getAnd(f8, f9, f10, f11, this.getFinalConstraints(formula)));
+		return G.apply(CLTLocFormula.getAnd(f7, f8, f9, f10, this.getFinalConstraints(formula)));
 		
 	}
 
@@ -590,11 +590,11 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 		CLTLocFormula f1 = 
 				IFF.apply(
 						low.apply(idFormula), 
-						OR.apply(
-							AND.apply(
+						OR.apply( 
+							 AND.apply(
 									ORIGIN,
-									OR.apply(
-											AND.apply(
+									OR.apply( 
+											 AND.apply(
 													NEG.apply(first.apply(idFormula)), 
 													OR.apply(
 															low.apply(child)
@@ -613,7 +613,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 																		)
 																	)
 															)
-													)
+													) 
 											,
 											CLTLocFormula.getAnd(
 													first.apply(idFormula),
@@ -622,7 +622,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 															U.apply(
 																AND.apply(
 																		GE.apply(z0, ZERO), 
-																		NEG.apply(beforeUpNowDown.apply(child))
+																		CLTLocFormula.TRUE//NEG.apply(beforeUpNowDown.apply(child))
 																	)
 																,
 																AND.apply(
@@ -631,7 +631,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 																		)
 															)
 													)
-											)
+											) 
 									)
 								),
 								AND.apply(
@@ -747,7 +747,7 @@ public class MITLI2CLTLocVisitor implements MITLIVisitor<CLTLocFormula> {
 							)
 					);
 				
-		return G.apply(CLTLocConjunction.getAnd(f0, f1, f2,f3,f4));
+		return G.apply(CLTLocConjunction.getAnd(f0, f1, f2,f3, this.getFinalConstraints(formula)));
 	}
 
 	/**
